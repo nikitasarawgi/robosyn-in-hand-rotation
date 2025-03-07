@@ -77,10 +77,14 @@ STL_FILE_DICT = {'base_link': "assets/urdf/allegro_hand_description/meshes/base_
                  'link_15.0_tip': "assets/urdf/allegro_hand_description/meshes/modified_tip.STL"}
 
 def _create_sim_once(gym, *args, **kwargs):
+    print(f"Gym object: {gym}")
     global EXISTING_SIM
     if EXISTING_SIM is not None:
         return EXISTING_SIM
     else:
+        # nisara:
+        print("Printing arguments here: ", *args)
+        print("Printing arguments here: ", **kwargs)
         EXISTING_SIM = gym.create_sim(*args, **kwargs)
         return EXISTING_SIM
 
