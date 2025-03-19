@@ -335,6 +335,7 @@ class DistillCollector:
         episode_length = []
 
         for it in range(self.current_learning_iteration, num_learning_iterations):
+            print("iteration: ", it)
             # report_gpu()
             ep_infos = []
 

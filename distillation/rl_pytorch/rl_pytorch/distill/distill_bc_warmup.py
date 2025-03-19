@@ -242,7 +242,7 @@ class DistillWarmUpTrainer:
         self.teacher_data_dir = teacher_data_dir
 
     def mini_batch_generator(self, num_mini_batches):
-        batch_size = 200 * 256 * self.mini_data_size  # self.vec_env.env.num_envs * self.num_transitions_per_env
+        batch_size = 200 * self.vec_env.env.num_envs * self.mini_data_size  # self.vec_env.env.num_envs * self.num_transitions_per_env
         mini_batch_size = batch_size // num_mini_batches
         # For physics-based RL, each environment is already randomized. There is no value to doing random sampling
         # but a lot of CPU overhead during the PPO process. So, we can just switch to a sequential sampler instead
@@ -434,6 +434,7 @@ class DistillWarmUpTrainer:
         teacher_file_list = os.listdir(self.teacher_data_dir)
         for idx_worker in range(self.mini_data_size):
             load_dir = os.path.join(self.teacher_data_dir, random.choice(teacher_file_list)) 
+            print(f"for idx_worker {idx_worker}, loading directory: {load_dir}")
             print(load_dir)
             teacher_obs_tmp, teacher_actions_tmp, teacher_sigmas_tmp, teacher_pointcloud_tmp = torch.load(load_dir) 
             teacher_obs_storage.extend(teacher_obs_tmp.cpu())
@@ -466,6 +467,7 @@ class DistillWarmUpTrainer:
         for epoch in range(self.num_learning_epochs):
             print("UPDATE START EPOCH", epoch)
             for batch_idx, indices in enumerate(batch):
+                # print(f"batch_idx, indices: {batch_idx}, {indices}")
                 teacher_obs_batch = teacher_obs_storage[indices].to(self.device)
                 teacher_actions_batch = teacher_actions_storage[indices].to(self.device)
                 teacher_sigmas_batch = teacher_sigmas_storage[indices].to(self.device)
