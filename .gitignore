@@ -3,3 +3,6 @@ __pycache__
 *.pyc
 wandb/** 
 runs/**
+
+demonstration-z/** 
+.vscode/**
